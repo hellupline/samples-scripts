@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# $ kubectl shell
+
+set -o pipefail # exit on pipeline error
+set -e # exit on error
+set -u # variable must exist
+# set -x # verbose
+
+kubectl run --rm -it shell --image=busybox --restart=Never

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# $ kubectl pods failed
+
+set -o pipefail # exit on pipeline error
+set -e # exit on error
+set -u # variable must exist
+# set -x # verbose
+
+kubectl get --all-namespaces pods --field-selector='status.phase=Failed'

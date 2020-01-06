@@ -8,14 +8,7 @@ set -o pipefail # exit on pipeline error
 set -e # exit on error
 set -u # variable must exist
 
-die () {
-    echo >&2 "$@"
-    exit 1
-}
-
-[ "$#" -eq 1 ] || die "1 argument required, $# provided"
-
-DOMAIN=${1}
+DOMAIN=${1:-localhost}
 
 mkdir -p tls-certs
 
@@ -28,7 +21,7 @@ openssl req -x509 -new -sha256 -days 3650 \
 # create application certs
 openssl genrsa -out tls-certs/service.key 4096
 openssl req -new -sha256 -days 3650 \
-    -addext "subjectAltName = DNS:localhost,IP:::1,IP:127.0.0.1" \
+    -addext "subjectAltName = DNS:${DOMAIN},IP:::1,IP:127.0.0.1" \
     -key tls-certs/service.key -out tls-certs/service.csr \
     -subj "/O=${DOMAIN}/CN=localhost"
 openssl x509 -req -sha256 \
@@ -38,5 +31,5 @@ openssl x509 -req -sha256 \
         echo 'authorityKeyIdentifier=keyid,issuer'; \
         echo 'basicConstraints=CA:FALSE'; \
         echo 'keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment'; \
-        echo "subjectAltName = DNS:${DOMAIN},IP:127.0.0.1"; \
+        echo "subjectAltName = DNS:${DOMAIN},IP:::1,IP:127.0.0.1"; \
     )

@@ -15,6 +15,6 @@ die () {
 
 [ "$#" -eq 1 ] || die "1 argument required, $# provided"
 
-DOMAIN=${1}
+DOMAIN="${1}"
 
 echo | openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 -showcerts | openssl x509 -text

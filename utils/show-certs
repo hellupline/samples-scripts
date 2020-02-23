@@ -17,4 +17,4 @@ die () {
 
 DOMAIN="${1}"
 
-echo | openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 -showcerts | openssl x509 -text
+openssl s_client -servername ${DOMAIN} -connect ${DOMAIN}:443 -showcerts < /dev/null | openssl x509 -noout -text -subject -issuer -dates
